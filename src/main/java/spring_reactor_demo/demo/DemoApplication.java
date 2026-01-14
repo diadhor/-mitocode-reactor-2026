@@ -45,16 +45,32 @@ public class DemoApplication implements CommandLineRunner {
 //    M4
     private void m2Map() {
         Flux<String> f1 = Flux.fromIterable(dishes);
-        f1.map(x -> x.toUpperCase())        //map, es un operador de transformcion de sus elementos
-                .subscribe(log::info);
+//        f1.map(x -> x.toUpperCase()); //cada accion genera un nuevo flujo con sus valores posiblemente alterados, para ver los cambios de ese flujo, debemos subscribirnos a él. O si no, guardar su valor dentro de una variable y subscribirse a ella.
+//        f1.subscribe(log::info);  //Va a mostrar los elementos sin cambio alguno
+
+        Flux<String> f2 = f1.map(String::toUpperCase);        //Map, es un operador de transformcion de sus elementos
+        f2.subscribe(log::info);
     }
 
 
+//  M5
+
+    private void m3Flatmap() {
+        Mono.just("jaime").map(x->34).subscribe(e->log.info("Data: "+e)); //Transforma el dato e imprime "Data: 34"
+        Mono.just("jaime").map(x->Mono.just(34)).subscribe(e->log.info("Data: "+e)); //Debido a que el metodo map solo transforma ha de convertir el String "jaime" en un mono, retornando "Data:  Monojust"
+        Mono.just("jaime").flatMap(x->Mono.just(34)).subscribe(e->log.info("Data: "+e)); // FlatMap aplana/descomprime el Mono pudiendo extraer su contenido para asi mostrarlo
+    }
+
+// M&
+
+    private void m4Range() {
+        Flux<Integer> fx = Flux.range(0,10);
+        fx.map(x -> x * 2)
+                .subscribe(s -> log.info("Data: "+s));
+    }
 
 
-
-
-
+//Continuar con la creacion del metodo que contiene la funcion de delay elements
 
 
 
@@ -77,12 +93,12 @@ public class DemoApplication implements CommandLineRunner {
         dishes.add("Tacos al pastor");
         dishes.add("Bandeja Paisa");
         dishes.add("Pan con Chicharron");
-        createMono();
-        createFlux();
-        m1DoOnNext();
-        m2Map();
-
-
+//        createMono();
+//        createFlux();
+//        m1DoOnNext();
+//        m2Map();
+//        m3Flatmap();
+          m4Range();
 
 
     }
